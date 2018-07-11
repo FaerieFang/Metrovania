@@ -143,7 +143,7 @@ Transform:
   m_LocalScale: {x: 1.2492815, y: 0.50139767, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &44723017
 SpriteRenderer:
@@ -335,7 +335,7 @@ Transform:
   m_LocalScale: {x: 105.74572, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!251 &79385399
 PlatformEffector2D:
@@ -397,6 +397,8 @@ MonoBehaviour:
   fallMultiplier: 2.5
   lowJumpMultiplier: 2.5
   projectileSpeed: 8
+  attackCD: 4
+  shootCD: 4
   groundCheck: {fileID: 824613757}
   whatIsGround:
     serializedVersion: 2
@@ -683,7 +685,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1860338835
 MonoBehaviour:
@@ -696,7 +698,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d882d3379104f0044a5e72c3d010eaf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyTime: 0.8
+  destroyTime: 0.7
   destroy: 0
 --- !u!50 &1860338836
 Rigidbody2D:
@@ -817,7 +819,7 @@ Transform:
   m_LocalScale: {x: 40.65043, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &2074900350
 BoxCollider2D:

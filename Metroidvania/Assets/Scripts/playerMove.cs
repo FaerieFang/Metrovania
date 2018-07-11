@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-//TODO Add comments to this mess so I don't hate myself as much later
-//TODO: Add cooldown to attack and shoot
-
 
 public class playerMove : MonoBehaviour{
     public Rigidbody2D rb;
@@ -21,22 +18,28 @@ public class playerMove : MonoBehaviour{
     public float fallMultiplier;
     public float lowJumpMultiplier;
     public float projectileSpeed;
+    public float attackCD;
+    public float shootCD;
+    float shootCDValue;
+    float attackCDValue;
+
     bool facingRight = true;
 
     bool grounded = false;
     public Transform groundCheck;
-    float groundRadius = 0.3f;
+    float groundRadius = 0.2f;
     public LayerMask whatIsGround;
+
     public GameObject projectile;
     public GameObject wyvern;
     void Start(){
         rb = GetComponent<Rigidbody2D>();
+
     }
 
     void Update(){
-
+        //Check if grounded and set breaking power
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
-
         if (grounded){
             breakPower = 200;
         }
@@ -44,6 +47,7 @@ public class playerMove : MonoBehaviour{
             breakPower = 30;
         }
 
+        //attack inputs
         if (Input.GetKeyDown(attack)){
             Attack();
         }
@@ -52,7 +56,7 @@ public class playerMove : MonoBehaviour{
             Shoot();
         }
 
-
+        //jump and movement
         if (Input.GetKeyDown(jump) && grounded){
             rb.velocity = Vector2.up * jumpVelocity;
         }
@@ -73,8 +77,6 @@ public class playerMove : MonoBehaviour{
             v2.x = v2.x * breakPower;
             rb.AddForce(v2 * Time.deltaTime);
         }
-
-
         if (rb.velocity.y < 0){
             rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
         }
@@ -89,18 +91,39 @@ public class playerMove : MonoBehaviour{
     }
 
     void Shoot(){
-        Vector2 offset = wyvern.transform.position;
-        
-        GameObject clone = Instantiate(projectile, offset, transform.rotation);
-        if (facingRight){
-            offset.x = offset.x + 0.3f;
-            clone.GetComponent<Rigidbody2D>().velocity = Vector2.right * projectileSpeed;
+        //Shoots at position of wyvern, offset to be front of wyvern
+        if (shootCDValue <= 0){
+            Vector2 offset = wyvern.transform.position;
+
+            GameObject clone = Instantiate(projectile, offset, transform.rotation);
+            if (facingRight){
+                offset.x = offset.x + 0.3f;
+                clone.GetComponent<Rigidbody2D>().velocity = Vector2.right * projectileSpeed;
+            }
+            else if (!facingRight){
+                offset.x = offset.x - 0.3f;
+                clone.GetComponent<Rigidbody2D>().velocity = Vector2.left * projectileSpeed;
+            }
+            //enable destruction on projectile
+            clone.GetComponent<projectileScript>().destroy = true;
+            //set a cooldown, measured in tenth of seconds
+            shootCDValue = shootCD;
+            StartCoroutine("ShootCoolDown");
         }
-        else if (!facingRight){
-            offset.x = offset.x - 0.3f;
-            clone.GetComponent<Rigidbody2D>().velocity = Vector2.left * projectileSpeed;
+
+    }
+    //cooldown coroutines 
+    IEnumerator ShootCoolDown(){
+        while (shootCDValue > 0){
+            yield return new WaitForSeconds(0.1f);
+            shootCDValue -= 1;
         }
-        clone.GetComponent<projectileScript>().destroy = true;
+    }
+    IEnumerator AttackCoolDown(){
+        while (attackCDValue > 0){
+            yield return new WaitForSeconds(0.1f);
+            attackCDValue -= 1;
+        }
     }
 
 }

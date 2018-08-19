@@ -22,8 +22,7 @@ public class playerMove : MonoBehaviour{
     public float shootCD;
     float shootCDValue;
     float attackCDValue;
-
-    bool facingRight = true;
+    public bool facingRight = true;
 
     bool grounded = false;
     public Transform groundCheck;

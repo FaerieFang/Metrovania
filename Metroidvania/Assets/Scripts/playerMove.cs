@@ -86,21 +86,27 @@ public class playerMove : MonoBehaviour{
     }
 
     void Attack(){
+        if (attackCDValue <= 0){
 
+        }
+        StartCoroutine("AttackCoolDown");
     }
 
     void Shoot(){
         //Shoots at position of wyvern, offset to be front of wyvern
-        if (shootCDValue <= 0){
+        if (shootCDValue <= 0) {
             Vector2 offset = wyvern.transform.position;
-
+            if (facingRight) {
+                offset.x = offset.x + 0.3f;
+            }
+            if (!facingRight){
+                offset.x = offset.x - 0.3f;
+            }
             GameObject clone = Instantiate(projectile, offset, transform.rotation);
             if (facingRight){
-                offset.x = offset.x + 0.3f;
                 clone.GetComponent<Rigidbody2D>().velocity = Vector2.right * projectileSpeed;
             }
-            else if (!facingRight){
-                offset.x = offset.x - 0.3f;
+            else if (!facingRight){   
                 clone.GetComponent<Rigidbody2D>().velocity = Vector2.left * projectileSpeed;
             }
             //enable destruction on projectile
